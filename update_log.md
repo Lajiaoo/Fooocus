@@ -1,3 +1,95 @@
+# 2.0.85
+
+* Speed Up Again
+
+# 2.0.80
+
+* Improved the scheduling of ADM guidance and CFG mimicking for better visual quality in high frequency domain and small objects.
+
+# 2.0.80
+
+* Rework many patches and some UI details.
+* Speed up processing.
+* Move Colab to independent branch.
+* Implemented CFG Scale and TSNR correction when CFG is bigger than 10.
+* Implemented Developer Mode with more options to debug.
+
+### 2.0.72
+
+(2023 sep 21) The feature updating of Fooocus will be paused for about two or three weeks because we have some events and travelling - we will come back in early or mid October. 
+
+### 2.0.72
+
+* Allow users to choose path of models.
+
+### 2.0.65
+
+* Inpaint model released.
+
+### 2.0.50
+
+* Variation/Upscale (Midjourney Toolbar) implemented.
+
+### 2.0.16
+
+* Virtual memory system implemented. Now Colab can run both base model and refiner model with 7.8GB RAM + 5.3GB VRAM, and it never crashes.
+* If you are lucky enough to read this line, keep in mind that ComfyUI cannot do this. This is very reasonable that Fooocus is more optimized because it only need to handle a fixed pipeline, but ComfyUI need to consider arbitrary pipelines. 
+* But if we just consider the optimization of this fixed workload, after 2.0.16, Fooocus has become the most optimized SDXL app, outperforming ComfyUI.
+
+### 2.0.0
+
+* V2 released.
+* completely rewrite text processing pipeline (higher image quality and prompt understanding).
+* support multi-style.
+* In 100 tests (prompts written by ChatGPT), V2 default results outperform V1 default results in 87 cases, evaluated by two human.
+* In 100 tests (prompts written by ChatGPT), V2 prompt understanding outperform V1 prompt understanding in 81 cases, evaluated by two human, in both default setting and multi/single style mode.
+* Because the above number is above 80%, we view this as a major update and directly jump to 2.0.0.
+* Some other things are renamed.
+
+### 1.0.67
+
+* Use dynamic weighting and lower weights for prompt expansion.
+
+### 1.0.64
+
+* Fixed a small OOM problem.
+
+### 1.0.62
+
+* Change prompt expansion to suffix mode for better balance of semantic and style (and debugging).
+
+### 1.0.60
+
+* Tune the balance between style and Prompt Expansion.
+
+### 1.0.56
+
+* Begin to use magic split.
+
+### 1.0.55
+
+* Minor changes of Prompt Expansion.
+
+### 1.0.52
+
+* Reduce the semantic corruption of Prompt Expansion.
+
+### 1.0.51
+
+* Speed up Prompt Expansion a bit.
+
+### 1.0.50
+
+* Prompt expansion and a "Raw mode" to turn it off (similar to Midjourney's "raw").
+
+### 1.0.45
+
+* Reworked SAG, removed unnecessary patch
+* Reworked anisotropic filters for faster compute.
+* Replaced with guided anisotropic filter for less distortion.
+
+### 1.0.41
+
 (The update of Fooocus will be paused for a period of time for AUTOMATIC1111 sd-webui 1.6.X, and some features will also be implemented as webui extensions)
 
 ### 1.0.40

@@ -1,4 +1,6 @@
 import os
+os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
+
 import sys
 import platform
 import fooocus_version
@@ -6,7 +8,7 @@ import fooocus_version
 from modules.launch_util import is_installed, run, python, \
     run_pip, repo_dir, git_clone, requirements_met, script_path, dir_repos
 from modules.model_loader import load_file_from_url
-from modules.path import modelfile_path, lorafile_path
+from modules.path import modelfile_path, lorafile_path, vae_approx_path, fooocus_expansion_path, upscale_models_path
 
 REINSTALL_ALL = False
 
@@ -20,7 +22,7 @@ def prepare_environment():
     xformers_package = os.environ.get('XFORMERS_PACKAGE', 'xformers==0.0.20')
 
     comfy_repo = os.environ.get('COMFY_REPO', "https://github.com/comfyanonymous/ComfyUI")
-    comfy_commit_hash = os.environ.get('COMFY_COMMIT_HASH', "2bc12d3d22efb5c63ae3a7fc342bb2dd16b31735")
+    comfy_commit_hash = os.environ.get('COMFY_COMMIT_HASH', "2ef459b1d4d627929c84d11e5e0cbe3ded9c9f48")
 
     print(f"Python {sys.version}")
     print(f"Fooocus version: {fooocus_version.version}")
@@ -63,30 +65,52 @@ lora_filenames = [
      'https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_offset_example-lora_1.0.safetensors')
 ]
 
+vae_approx_filenames = [
+    ('xlvaeapp.pth',
+     'https://huggingface.co/lllyasviel/misc/resolve/main/xlvaeapp.pth')
+]
+
+
+upscaler_filenames = [
+    ('fooocus_upscaler_s409985e5.bin',
+     'https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_upscaler_s409985e5.bin')
+]
+
 
 def download_models():
     for file_name, url in model_filenames:
         load_file_from_url(url=url, model_dir=modelfile_path, file_name=file_name)
     for file_name, url in lora_filenames:
         load_file_from_url(url=url, model_dir=lorafile_path, file_name=file_name)
+    for file_name, url in vae_approx_filenames:
+        load_file_from_url(url=url, model_dir=vae_approx_path, file_name=file_name)
+    for file_name, url in upscaler_filenames:
+        load_file_from_url(url=url, model_dir=upscale_models_path, file_name=file_name)
+
+    load_file_from_url(
+        url='https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_expansion.bin',
+        model_dir=fooocus_expansion_path,
+        file_name='pytorch_model.bin'
+    )
+
     return
 
 
-def clear_comfy_args():
+def ini_comfy_args():
     argv = sys.argv
     sys.argv = [sys.argv[0]]
-    import comfy.cli_args
+
+    from comfy.cli_args import args as comfy_args
+    comfy_args.disable_cuda_malloc = True
+    comfy_args.disable_smart_memory = True
+    comfy_args.auto_launch = False
+
     sys.argv = argv
-
-
-def cuda_malloc():
-    import cuda_malloc
 
 
 prepare_environment()
 
-clear_comfy_args()
-# cuda_malloc()
+ini_comfy_args()
 
 download_models()
 
